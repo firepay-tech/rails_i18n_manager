@@ -1,6 +1,8 @@
 module RailsI18nManager
   class TranslationsController < ApplicationController
     before_action :get_translation_key, only: [:show, :edit, :update, :destroy]
+    
+    skip_before_action :verify_authenticity_token, only: [:import]
 
     def index
       case params[:sort]
@@ -109,16 +111,28 @@ module RailsI18nManager
               overwrite_existing: @form.overwrite_existing,
               mark_inactive_translations: @form.mark_inactive_translations,
             )
+            respond_to do |format|
+              format.html { redirect_to translations_path, flash: { notice: "Import Successful" } }
+              format.json { render json: { message: "Import Successful" }, status: :ok }
+            end
           rescue TranslationsImportJob::ImportAbortedError => e
-            flash.now.alert = e.message
-            render
-            return
+            respond_to do |format|
+              format.html do
+                flash.now.alert = e.message
+                render
+              end
+              format.json { render json: { error: e.message }, status: :unprocessable_entity }
+            end
           end
-
-          redirect_to translations_path, notice: "Import Successful"
         else
-          flash.now.alert = "Import not started due to form errors."
-          render
+          message = "Import not started due to form errors."
+          respond_to do |format|
+            format.html do
+              flash.now.alert = message
+              render
+            end
+              format.json { render json: { error: message }, status: :unprocessable_entity }
+          end
         end
       end
     end
