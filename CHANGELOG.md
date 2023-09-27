@@ -1,5 +1,8 @@
 # CHANGELOG
 
+### v1.0.2
+- Fixed cleaning old files in the export_to method
+
 ### v1.0.1
 - Fixed GoogleTranslate functionality
 - (Custumized code by SYLQ) Allow import to be called by API REST
