@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### v1.0.1
+- Fixed GoogleTranslate functionality
+- (Custumized code by SYLQ) Allow import to be called by API REST
+- Add pagination in index views
+
 ### v1.0.0
 - Release to rubygems
 
