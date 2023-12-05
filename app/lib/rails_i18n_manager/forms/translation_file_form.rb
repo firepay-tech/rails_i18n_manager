@@ -35,7 +35,7 @@ module RailsI18nManager
 
         case File.extname(file)
         when ".yml"
-          if !YAML.safe_load(File.read(file)).is_a?(Hash)
+          if !YAML.load(File.read(file)).is_a?(Hash)
             errors.add(:file, "Invalid yml file.")
             return
           end
